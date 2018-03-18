@@ -1,0 +1,6 @@
+(jbuild_version 1)
+
+(library(
+        (name simplify_path)
+        (libraries (batteries gg))
+))
