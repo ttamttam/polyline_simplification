@@ -6,4 +6,5 @@ Should be tail recursive.
 
 
 ## TODO:
+* test
 * remove gg dependencie
