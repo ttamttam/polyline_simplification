@@ -4,7 +4,10 @@ Ramer-Douglas-Peucker polyline simplification in OCaml
 
 Should be tail recursive.
 
+* `make`: builds
+* `make clean`: cleans
+* `make doc`: build the doc
+
 
 ## TODO:
-* test
-* remove gg dependencie
+* test on a big polyline

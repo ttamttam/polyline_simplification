@@ -1,6 +1,7 @@
 (jbuild_version 1)
 
 (library(
-        (name simplify_path)
-        (libraries (batteries gg))
+        (name polyline_simplification)
+        (public_name polyline_simplification)
+        (libraries (batteries))
 ))

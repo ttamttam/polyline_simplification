@@ -1,28 +1,38 @@
 open Batteries
 
+(* int -> int -> Batteries.BitSet.t -> unit -> unit *)
 let erase_bits_between first last indexes () =
   for i = succ first to pred last
   do BitSet.unset indexes i done
+let is_zero ~eps v = abs_float v <= eps
 
-let sqrd first last = Gg.V3.(last - first |> norm2)
+module type VECTOR = sig
+  type t
+  val sub : t -> t -> t
+  val unit : t -> t
+  val norm2 : t -> float
+  val cross_norm2 : t -> t -> float
+end
 
-let find_middle sqr_epsilon first last a =
+type 'a find_middle_func = float -> int -> int -> 'a array -> int option
+
+let find_middle
+    (type t) (module V:VECTOR with type t = t)
+    sqr_epsilon first last a =
+
   if last < first + 2
   then None
   else
     (* Square distance between a point and (first,last) segment *)
     let sqdist =
-      let seg = Gg.V3.of_v2 ~z:0. Gg.V2.(a.(last) - a.(first)) in
+      let seg = V.sub a.(last) a.(first) in
       if
-        Gg.Float.is_zero ~eps:1e-6 (Gg.V3.norm2 seg)
+        is_zero ~eps:1e-6 (V.norm2 seg)
       then
-        (fun p ->
-           Gg.V2.(p - a.(first) |> norm2))
+        (fun p -> V.(sub p a.(first) |> norm2))
       else
-        let u = Gg.V3.unit seg in
-        (fun p ->
-           let vec = Gg.V3.of_v2 ~z:0. Gg.V2.(a.(first) - p) in
-           Gg.V3.(cross vec u |> norm2)) in
+        let u = V.unit seg in
+        (fun p -> V.cross_norm2 u (V.sub a.(first) p)) in
 
     Array.fold_lefti
       (fun (idx, high) curr_idx p ->
@@ -37,9 +47,10 @@ let find_middle sqr_epsilon first last a =
     (* And convert it to be meaningful as an index in [a] *)
     |> Option.map ((+) (succ first))
 
-let simplify a epsilon =
+
+let simplified_indexes find_middle ~polyline ~epsilon =
   let sqr_epsilon = epsilon *. epsilon in
-  let sz = Array.length a in
+  let sz = Array.length polyline in
   let indexes = BitSet.create_full sz in
 
   (* Ramer-Douglas-Peucker algorithm *)
@@ -47,7 +58,7 @@ let simplify a epsilon =
     | [] -> ()
     | (first, last) :: tl ->
       begin
-        match find_middle sqr_epsilon first last a with
+        match find_middle sqr_epsilon first last polyline with
         | None ->
           erase_bits_between first last indexes ();
           simp tl
@@ -55,16 +66,17 @@ let simplify a epsilon =
           simp ((first, middle) :: (middle, last) :: tl)
       end in
 
-  let () = simp [(0, pred sz)] in
+  simp [(0, pred sz)];
+  indexes
 
-  (* After the simplification, we just have to collect the indexes of the bits
-     remaining set in indexes *)
+let simplify find_middle ~polyline ~epsilon =
+  simplified_indexes find_middle polyline epsilon
 
-  (* Turn indexes into an enum *)
-  BitSet.enum indexes
+ (* Turn indexes into an enum *)
+  |> BitSet.enum
 
   (* Use it to index the array elements we want to keep *)
-  |> Enum.map (Array.get a)
+  |> Enum.map (Array.get polyline)
   |> Array.of_enum
 
 (*
