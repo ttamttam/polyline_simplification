@@ -1,10 +1,11 @@
 opam-version: "1.2"
 name: "polyline_simplification"
-version: "0.4"
+version: "2018-10-13"
 maintainer: "Matthieu Dubuget <matthieu.dubuget@gmail.com"
 authors: ["Matthieu Dubuget <matthieu.dubuget@gmail.com"]
 homepage: "https://github.com/ttamttam/polyline_simplification"
 bug-reports: "https://github.com/ttamttam/polyline_simplification/issues"
 license: "ISC"
-depends: ["batteries"]
-build: [["jbuilder" "build" "-p" name "-j" jobs]]
+depends: ["batteries"
+          "dune" {build}]
+build: [["dune" "build" "-p" name "-j" jobs]]

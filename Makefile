@@ -1,13 +1,13 @@
 .PHONY: all clean docs
 
 all:
-	jbuilder build
+	dune build
 
 clean:
-	jbuilder clean
+	dune clean
 	rm -rf docs
 
 docs:
-	jbuilder build @doc
+	dune build @doc
 	mkdir docs
 	cp -R _build/default/_doc/* docs

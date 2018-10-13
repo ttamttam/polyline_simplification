@@ -70,7 +70,7 @@ let simplified_indexes find_middle ~polyline ~epsilon =
   indexes
 
 let simplify find_middle ~polyline ~epsilon =
-  simplified_indexes find_middle polyline epsilon
+  simplified_indexes find_middle ~polyline ~epsilon
 
  (* Turn indexes into an enum *)
   |> BitSet.enum

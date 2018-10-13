@@ -1,7 +1,0 @@
-(jbuild_version 1)
-
-(library(
-        (name polyline_simplification)
-        (public_name polyline_simplification)
-        (libraries (batteries))
-))
