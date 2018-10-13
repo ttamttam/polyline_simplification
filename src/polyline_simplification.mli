@@ -5,8 +5,7 @@
 (** In order to simplify a point array, you will have to write a [(module V)] of
     type {! VECTOR}, {! VECTOR.t} being the type of the points. *)
 
-module type VECTOR =
-sig
+module type VECTOR = sig
   type t
 
   val sub : t -> t -> t
@@ -25,19 +24,25 @@ end
 (** {2 Step 2: retrieve a {! find_middle_func}} *)
 
 type 'a find_middle_func
+
 val find_middle : (module VECTOR with type t = 'a) -> 'a find_middle_func
 (** Then, retrive a {! find_middle_func} with [find_middle (module V)]) *)
 
 (** {2 Step 3: simplify} *)
 
-val simplified_indexes : 'a find_middle_func -> polyline:'a array -> epsilon:float -> Batteries.BitSet.t
+val simplified_indexes :
+     'a find_middle_func
+  -> polyline:'a array
+  -> epsilon:float
+  -> Batteries.BitSet.t
 (** [simplified_indexes fm ~polyline ~epsilon]
 
     @return a {! Batteries.BitSet.t} of same size than [(polyline:'a array)]: the
    set bits correspond to the elements of [pl] to keep, and the unset bits
    correspond to the elements you can get rid of. *)
 
-val simplify : 'a find_middle_func -> polyline:'a array -> epsilon:float -> 'a array
+val simplify :
+  'a find_middle_func -> polyline:'a array -> epsilon:float -> 'a array
 (** [simplify fm ~polyline ~epsilon]
 
     @return a simplified ['a array] (it makes use of {! simplified_indexes}

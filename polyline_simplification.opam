@@ -1,6 +1,6 @@
 opam-version: "1.2"
 name: "polyline_simplification"
-version: "2018-10-13"
+version: "2018-10-13-1"
 maintainer: "Matthieu Dubuget <matthieu.dubuget@gmail.com"
 authors: ["Matthieu Dubuget <matthieu.dubuget@gmail.com"]
 homepage: "https://github.com/ttamttam/polyline_simplification"
