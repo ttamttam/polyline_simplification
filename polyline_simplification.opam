@@ -1,6 +1,7 @@
-opam-version: "1.2"
+opam-version: "2.0"
 name: "polyline_simplification"
-version: "2018-10-13-1"
+synopsis: "Tail recursive implementation of Ramer-Douglas-Peucker algorithm for polylines simplification"
+version: "2019-01-02-1"
 maintainer: "Matthieu Dubuget <matthieu.dubuget@gmail.com"
 authors: ["Matthieu Dubuget <matthieu.dubuget@gmail.com"]
 homepage: "https://github.com/ttamttam/polyline_simplification"
